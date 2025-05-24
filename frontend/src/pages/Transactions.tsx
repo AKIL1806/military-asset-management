@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Dashboard = () => {
+const Transactions = () => {
   return (
     <div className="p-6 text-2xl font-bold">
-      Dashboard Page
+      Transactions Page
     </div>
   );
 };
 
-export default Dashboard;
+export default Transactions;

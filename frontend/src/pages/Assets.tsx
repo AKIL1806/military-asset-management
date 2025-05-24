@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Dashboard = () => {
+const Assets = () => {
   return (
     <div className="p-6 text-2xl font-bold">
-      Dashboard Page
+      Assets Page
     </div>
   );
 };
 
-export default Dashboard;
+export default Assets;
