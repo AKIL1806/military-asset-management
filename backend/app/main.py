@@ -3,5 +3,5 @@ from fastapi import FastAPI
 app = FastAPI()
 
 @app.get("/")
-def read_root():
-    return {"message": "Military Asset Management Backend Running"}
+def root():
+    return {"message": "FastAPI is working"}
