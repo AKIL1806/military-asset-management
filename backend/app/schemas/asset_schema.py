@@ -1,16 +1,18 @@
 from pydantic import BaseModel
+from typing import Optional
 
-class AssetBase(BaseModel):
+class AssetCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    type: Optional[str] = "Unknown"
+    status: Optional[str] = "Inactive"
+
+class AssetResponse(BaseModel):
+    id: int
     name: str
     type: str
-    quantity: int
-    base_id: int
-
-class AssetCreate(AssetBase):
-    pass
-
-class AssetOut(AssetBase):
-    id: int
+    status: str
+    description: Optional[str] = None
 
     class Config:
         orm_mode = True
