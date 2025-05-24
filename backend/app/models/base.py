@@ -1,1 +1,1 @@
-from app.core.db import Base  # reusing declarative_base()
+from app.core.db import Base 

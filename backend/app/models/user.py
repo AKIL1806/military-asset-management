@@ -1,12 +1,16 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, Enum
 from app.core.db import Base
+import enum
+
+class RoleEnum(str, enum.Enum):
+    admin = "admin"
+    commander = "commander"
+    logistics = "logistics"
 
 class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    email = Column(String, unique=True, index=True)
-    password = Column(String, nullable=False)  # hashed later
-    role = Column(String, nullable=False)  # admin, commander, logistics
-    base_id = Column(Integer, nullable=True)  # nullable for admins
+    username = Column(String, unique=True, index=True, nullable=False)
+    hashed_password = Column(String, nullable=False)
+    role = Column(Enum(RoleEnum), nullable=False)

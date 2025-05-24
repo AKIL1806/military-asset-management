@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from app.core.db import Base
 
 class Asset(Base):
@@ -6,6 +6,7 @@ class Asset(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-    type = Column(String, nullable=False)  # weapon, vehicle, etc.
-    quantity = Column(Integer, default=0)
-    base_id = Column(Integer, nullable=False)
+    type = Column(String, nullable=False)  
+    base_name = Column(String, nullable=False)
+    opening_balance = Column(Integer, default=0)
+    closing_balance = Column(Integer, default=0)
