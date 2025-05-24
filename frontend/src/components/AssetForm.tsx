@@ -1,46 +1,85 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import type { Asset } from "../services/assetService";
 
 interface AssetFormProps {
-  onSubmit: (data: { name: string; description: string }) => void;
+  onAdd: (asset: Asset) => void;
 }
 
-const AssetForm: React.FC<AssetFormProps> = ({ onSubmit }) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+const AssetForm: React.FC<AssetFormProps> = ({ onAdd }) => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name) return alert('Name is required');
-    onSubmit({ name, description });
+    setError(null);
+
+    if (!name.trim()) {
+      setError("Name is required");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:8000/api/assets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, description }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to create asset: ${response.statusText}`);
+      }
+
+      const newAsset: Asset = await response.json();
+      onAdd(newAsset);
+
+      setName("");
+      setDescription("");
+    } catch (err) {
+      setError("Failed to create asset");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded">
-      <div>
-        <label className="block font-medium mb-1" htmlFor="name">Name</label>
+    <form onSubmit={handleSubmit} className="max-w-md p-4 border rounded shadow-sm">
+      <h2 className="text-lg font-semibold mb-4">Add New Asset</h2>
+
+      {error && <p className="text-red-600 mb-2">{error}</p>}
+
+      <label className="block mb-2">
+        Name <span className="text-red-500">*</span>
         <input
-          id="name"
+          type="text"
           value={name}
-          onChange={e => setName(e.target.value)}
-          className="w-full border px-3 py-2 rounded"
+          onChange={(e) => setName(e.target.value)}
+          className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
+          disabled={loading}
           required
         />
-      </div>
-      <div>
-        <label className="block font-medium mb-1" htmlFor="description">Description</label>
+      </label>
+
+      <label className="block mb-4">
+        Description
         <textarea
-          id="description"
           value={description}
-          onChange={e => setDescription(e.target.value)}
-          className="w-full border px-3 py-2 rounded"
+          onChange={(e) => setDescription(e.target.value)}
+          className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
+          disabled={loading}
           rows={3}
         />
-      </div>
+      </label>
+
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        disabled={loading}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
       >
-        Create Asset
+        {loading ? "Adding..." : "Add Asset"}
       </button>
     </form>
   );
