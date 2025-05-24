@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import AssetList from "../components/AssetList";
+import type { Asset } from "../services/assetService";
+import { fetchAssets } from "../services/assetService";
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
+  const [assets, setAssets] = useState<Asset[]>([]);
+
+  useEffect(() => {
+    fetchAssets()
+      .then((data) => setAssets(data))
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
-    <div className="p-6 text-2xl font-bold">
-      Dashboard Page
+    <div>
+      <h1>Dashboard</h1>
+      <AssetList assets={assets} />
     </div>
   );
 };
