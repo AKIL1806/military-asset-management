@@ -1,11 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.api import assets  # Import the assets router
 
 app = FastAPI()
+
+# Allow frontend dev server to access backend
 origins = [
     "http://localhost:5173",
 ]
 
+# Enable CORS for frontend-backend communication
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -14,12 +18,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/api/assets")
-def get_assets():
-    return [
-        {"id": 1, "name": "Tank A", "type": "Vehicle", "status": "Active"},
-        {"id": 2, "name": "Drone X", "type": "UAV", "status": "Inactive"},
-    ]
+# Mount assets router under /api/assets
+app.include_router(assets.router, prefix="/api/assets", tags=["assets"])
+
+# Health check route
 @app.get("/")
-def read_root():
+async def root():
     return {"message": "FastAPI is running"}
