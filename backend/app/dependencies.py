@@ -1,4 +1,4 @@
-# backend/app/dependencies.py
+
 
 from fastapi.security.api_key import APIKeyHeader
 from fastapi import Security

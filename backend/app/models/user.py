@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Enum
-from app.models.base import Base
+from app.core.db import Base
 import enum
 
 class RoleEnum(str, enum.Enum):
