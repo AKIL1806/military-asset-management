@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.models.transactions import Transfer
-from app.schemas.transaction_schema import TransferCreate, TransferOut
+from app.models.transfer import Transfer
+from app.schemas.transfer_schema import TransferCreate, TransferOut
 from app.core.db import get_db
 
 router = APIRouter(prefix="/transfers", tags=["Transfers"])
