@@ -1,13 +1,11 @@
 from app.core.db import Base, engine, SessionLocal
 
-# Import all models here to register them with Base.metadata
 import app.models.bases
 import app.models.asset
 import app.models.user
 import app.models.purchase
-# import app.models.transactions  # uncomment if you have this model
+import app.models.transactions  # If you have this module
 
-# Create all tables
 Base.metadata.create_all(bind=engine)
 
 from app.models.bases import BaseLocation

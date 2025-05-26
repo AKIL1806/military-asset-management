@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.core.db import get_db
@@ -9,12 +10,12 @@ from datetime import datetime
 router = APIRouter(prefix="/assignments", tags=["Assignments"])
 
 @router.post("/", response_model=AssignmentOut)
-def assign_asset(data: AssignmentCreate, db: Session = Depends(get_db), 
-                 require_roles_dep=Depends(lambda: __import__('app.middleware.rbac_middleware').rbac_middleware.require_roles(["admin", "base_commander"]))):
-    # Local import to avoid circular import
+def assign_asset(
+    data: AssignmentCreate,
+    db: Session = Depends(get_db),
+    require_roles_dep=Depends(lambda: __import__('app.middleware.rbac_middleware').rbac_middleware.require_roles(["admin", "base_commander"]))
+):
     from app.middleware.rbac_middleware import require_roles
-    
-    # Manually call require_roles dependency
     require_roles(["admin", "base_commander"])()
 
     asset = db.query(Asset).filter(Asset.id == data.asset_id).first()
@@ -23,10 +24,8 @@ def assign_asset(data: AssignmentCreate, db: Session = Depends(get_db),
     if asset.quantity < data.quantity:
         raise HTTPException(status_code=400, detail="Not enough asset quantity available")
 
-    # Update asset quantity
     asset.quantity -= data.quantity
 
-    # Create assignment
     assignment = Assignment(
         asset_id=data.asset_id,
         assigned_to=data.assigned_to,
@@ -40,14 +39,11 @@ def assign_asset(data: AssignmentCreate, db: Session = Depends(get_db),
     db.refresh(assignment)
     return assignment
 
-
-@router.get("/", response_model=list[AssignmentOut])
-def get_assignments(db: Session = Depends(get_db),
-                    require_roles_dep=Depends(lambda: __import__('app.middleware.rbac_middleware').rbac_middleware.require_roles(["admin", "base_commander", "logistics_officer"]))):
-    # Local import to avoid circular import
+@router.get("/", response_model=List[AssignmentOut])
+def get_assignments(
+    db: Session = Depends(get_db),
+    require_roles_dep=Depends(lambda: __import__('app.middleware.rbac_middleware').rbac_middleware.require_roles(["admin", "base_commander", "logistics_officer"]))
+):
     from app.middleware.rbac_middleware import require_roles
-
-    # Manually call require_roles dependency
     require_roles(["admin", "base_commander", "logistics_officer"])()
-
     return db.query(Assignment).all()
