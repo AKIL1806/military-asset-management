@@ -1,19 +1,20 @@
 from pydantic import BaseModel
-from typing import Optional
 from datetime import datetime
+from typing import Optional
 
 class PurchaseBase(BaseModel):
     asset_id: int
+    base_id: int
     quantity: int
-    price_per_unit: float
+    notes: Optional[str] = None
+    purchased_by: Optional[int] = None
 
 class PurchaseCreate(PurchaseBase):
     pass
 
 class PurchaseOut(PurchaseBase):
     id: int
-    created_at: datetime
-    updated_at: Optional[datetime] = None
+    purchase_date: datetime
 
     class Config:
         from_attributes = True

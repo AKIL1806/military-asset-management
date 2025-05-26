@@ -1,20 +1,19 @@
-from fastapi import APIRouter
-from typing import List
-from app.schemas.purchase_schema import PurchaseOut, PurchaseCreate
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
+from app.models.purchase import Purchase
+from app.schemas.purchase_schema import PurchaseCreate, PurchaseOut
+from app.core.db import get_db
 
 router = APIRouter()
 
-# Temporary in-memory "database"
-purchases_db = []
+@router.post("/", response_model=PurchaseOut, status_code=status.HTTP_201_CREATED)
+def create_purchase(purchase: PurchaseCreate, db: Session = Depends(get_db)):
+    db_purchase = Purchase(**purchase.model_dump())
+    db.add(db_purchase)
+    db.commit()
+    db.refresh(db_purchase)
+    return db_purchase
 
-@router.get("/", response_model=List[PurchaseOut])
-def get_purchases():
-    return purchases_db
-
-@router.post("/", response_model=PurchaseOut)
-def create_purchase(purchase: PurchaseCreate):
-    new_id = len(purchases_db) + 1
-    purchase_data = purchase.dict()
-    purchase_data["id"] = new_id
-    purchases_db.append(purchase_data)
-    return purchase_data
+@router.get("/", response_model=list[PurchaseOut])
+def list_purchases(db: Session = Depends(get_db)):
+    return db.query(Purchase).all()
