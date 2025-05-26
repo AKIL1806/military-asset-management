@@ -7,7 +7,6 @@ class TransactionBase(BaseModel):
     from_base_id: int
     to_base_id: int
     quantity: int
-    transfer_date: Optional[datetime] = None
     status: Optional[str] = "pending"
     initiated_by: Optional[int] = None
 
@@ -16,10 +15,11 @@ class TransactionCreate(TransactionBase):
 
 class TransactionOut(TransactionBase):
     id: int
+    transfer_date: Optional[datetime] = None
 
     class Config:
-        from_attributes = True
+        from_attributes = True  # For Pydantic v2; use orm_mode=True if on v1
 
-# ✅ Aliases for API-specific naming
+# Aliases for Transfer endpoints (for clarity in API code)
 TransferCreate = TransactionCreate
 TransferOut = TransactionOut
