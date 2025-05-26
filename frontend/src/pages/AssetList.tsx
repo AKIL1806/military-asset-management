@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import type { Asset } from "../services/assetService";
 import { fetchAssets } from "../services/assetService";
+import type { Asset } from "../services/assetService";
 import AssetList from "../components/AssetList";
 
 const AssetListPage: React.FC = () => {
@@ -9,8 +9,8 @@ const AssetListPage: React.FC = () => {
 
   useEffect(() => {
     fetchAssets()
-      .then((data: Asset[]) => setAssets(data))
-      .catch((err: Error) => setError(err.message));
+      .then(setAssets)
+      .catch((err) => setError(err.message));
   }, []);
 
   if (error) return <p className="text-red-500">Error: {error}</p>;

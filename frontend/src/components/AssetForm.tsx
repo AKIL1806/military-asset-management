@@ -62,7 +62,6 @@ const AssetForm: React.FC<AssetFormProps> = ({ onAdd }) => {
       const newAsset: Asset = await response.json();
       onAdd(newAsset);
 
-      // Reset form
       setName("");
       setType("");
       setStatus("active");
@@ -78,10 +77,7 @@ const AssetForm: React.FC<AssetFormProps> = ({ onAdd }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-md p-4 border rounded shadow-sm"
-    >
+    <form onSubmit={handleSubmit} className="max-w-md p-4 border rounded shadow-sm">
       <h2 className="text-lg font-semibold mb-4">Add New Asset</h2>
 
       {error && <p className="text-red-600 mb-2">{error}</p>}

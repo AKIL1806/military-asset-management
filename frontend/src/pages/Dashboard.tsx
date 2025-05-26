@@ -1,27 +1,11 @@
-import React, { useEffect, useState } from "react";
-import AssetList from "../components/AssetList";
-import AssetForm from "../components/AssetForm";
-import type { Asset } from "../services/assetService";
-import { fetchAssets } from "../services/assetService";
+import React from "react";
 
 const Dashboard: React.FC = () => {
-  const [assets, setAssets] = useState<Asset[]>([]);
-
-  useEffect(() => {
-    fetchAssets()
-      .then(setAssets)
-      .catch((err) => console.error(err));
-  }, []);
-
-  const handleAddAsset = (newAsset: Asset) => {
-    setAssets((prev) => [...prev, newAsset]);
-  };
-
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <AssetForm onAdd={handleAddAsset} />
-      <AssetList assets={assets} />
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+      <p>Welcome to the Military Asset Management System.</p>
+      <p>Use the navigation bar to manage assets, users, and transactions.</p>
     </div>
   );
 };
