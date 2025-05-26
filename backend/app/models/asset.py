@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 from app.core.db import Base
 
@@ -12,5 +12,8 @@ class Asset(Base):
     quantity = Column(Integer, nullable=False)
     base_id = Column(Integer, ForeignKey("bases.id"))
     description = Column(String(500), nullable=True)
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     base = relationship("BaseLocation", back_populates="assets")

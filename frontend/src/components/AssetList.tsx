@@ -16,6 +16,7 @@ const AssetList: React.FC<AssetListProps> = ({ assets }) => {
             <h3 className="font-semibold">{asset.name}</h3>
             <p>Type: {asset.type}</p>
             <p>Status: {asset.status}</p>
+            <p>Quantity: {asset.quantity}</p>
             {asset.description && <p>Description: {asset.description}</p>}
           </div>
         ))

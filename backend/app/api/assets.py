@@ -27,5 +27,3 @@ def get_asset(asset_id: int, db: Session = Depends(get_db)):
     if not asset:
         raise HTTPException(status_code=404, detail="Asset not found")
     return asset
-
-# Add update and delete routes as needed...

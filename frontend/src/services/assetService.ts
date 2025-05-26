@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/api/assets";
+const API_URL = "http://localhost:8000/api/v1/assets";
 
 export interface Asset {
   id: number;
@@ -6,6 +6,8 @@ export interface Asset {
   type: string;
   status: string;
   description?: string;
+  quantity?: number;
+  base_id?: number;
 }
 
 export async function fetchAssets(): Promise<Asset[]> {
